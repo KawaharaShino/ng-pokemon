@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Pokemon, PokemonContainer } from '../class/pokemon';
+import { PokemonHome, PokemonContainer } from '../class/pokemon';
 import { isNgTemplate } from '@angular/compiler';
 
 
@@ -16,19 +16,17 @@ export class PokemonService {
 
   getPokemons(url: string = this.pokemonUrl): any {
     return this.http.get<any>(url)
-  //   .pipe(map(item => {
-  //     item;
-      
-  //     // item.next,
-  //     // item.results.map((o: any) => {
-  //     //   new PokemonContainer(o)
-  //     // })
-  //   }))
   }
 
-getPokemon(url: string): any {
-  return this.http.get<any>(url).pipe(map(item =>
-    new Pokemon(item)
-  ))
-}
+  getPokemonHomeByUrl(url: string): any {
+    return this.http.get<any>(url).pipe(map(item =>
+      new PokemonHome(item)
+    ))
+  }
+  getPokemonById(id: number): any {
+    return this.http.get<any>('https://pokeapi.co/api/v2/pokemon-species/' + id)
+  }
+  getPokemonDataById(id: number): any {
+    return this.http.get<any>('https://pokeapi.co/api/v2/pokemon/' + id + '/')
+  }
 }

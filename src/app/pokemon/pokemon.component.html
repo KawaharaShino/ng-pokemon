@@ -1,0 +1,9 @@
+<p>{{ displayPokemon?.name }}</p>
+<p>{{ displayPokemon?.id }}</p>
+<ng-container *ngFor="let img of displayPokemon?.imageUrl">
+  <ng-container *ngIf="img" 
+  >
+    <img [src]="img" />
+  </ng-container>
+</ng-container>
+<p>{{ displayPokemon?.type }}</p>

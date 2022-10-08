@@ -1,11 +1,15 @@
 <div class="pokemon-list" >
+  <router-outlet></router-outlet>
   <ng-container *ngFor="let pokemon of displayPokemonList">
-    <div class="pokemon">
-      <p class="id">{{ pokemon.id }}</p>
-      <div class="img-container">
-        <img class="image" [src]="pokemon.imageUrl" alt=""/>
+    <a [routerLink]="['/detail']"
+      [queryParams]="{ id: pokemon.id}">
+      <div class="pokemon">
+        <p class="id">{{ pokemon.id }}</p>
+        <div class="img-container">
+          <img class="image" [src]="pokemon.imageUrl[0]" alt=""/>
+        </div>
+        <p class="name">{{ pokemon.name }}</p>
       </div>
-      <p class="name">{{ pokemon.name }}</p>
-    </div>
+    </a>
   </ng-container>
 </div>

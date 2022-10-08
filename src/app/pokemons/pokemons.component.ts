@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Pokemon, PokemonContainer } from '../class/pokemon';
+import { PokemonHome, PokemonContainer } from '../class/pokemon';
 import { PokemonService } from '../service/pokemon.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemons',
@@ -9,12 +10,12 @@ import { PokemonService } from '../service/pokemon.service';
   styleUrls: ['./pokemons.component.scss']
 })
 export class PokemonsComponent implements OnInit {
-  displayPokemonList: Pokemon[] = [];
+  displayPokemonList: PokemonHome[] = [];
 
   private next: string = '';
   private loaded = true
 
-  constructor(private pokemonService: PokemonService) { }
+  constructor(private pokemonService: PokemonService, private router: Router) { }
 
   ngOnInit(): void {
     this.getPokemons();
@@ -27,8 +28,8 @@ export class PokemonsComponent implements OnInit {
     }
     this.getPokemons(this.next);
   }
-  
-  private shuffle([...array]):Array<any> {
+
+  private shuffle([...array]): Array<any> {
     for (let i = array.length - 1; i >= 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -42,7 +43,7 @@ export class PokemonsComponent implements OnInit {
       .subscribe(
         (res: any) => {
           this.next = res.next;
-          
+
           const shuffledResults = this.shuffle(res.results)
           shuffledResults.forEach((
             element: PokemonContainer) => {
@@ -62,7 +63,7 @@ export class PokemonsComponent implements OnInit {
         })
   }
   private getPokemon(data: PokemonContainer): void {
-    this.pokemonService.getPokemon(data.url)
+    this.pokemonService.getPokemonHomeByUrl(data.url)
       .subscribe(
         (res: any) => {
           this.displayPokemonList.push(res);
