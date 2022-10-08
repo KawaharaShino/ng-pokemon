@@ -1,0 +1,11 @@
+<div class="pokemon-list" >
+  <ng-container *ngFor="let pokemon of displayPokemonList">
+    <div class="pokemon">
+      <p class="id">{{ pokemon.id }}</p>
+      <div class="img-container">
+        <img class="image" [src]="pokemon.imageUrl" alt=""/>
+      </div>
+      <p class="name">{{ pokemon.name }}</p>
+    </div>
+  </ng-container>
+</div>
