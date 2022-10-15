@@ -3,8 +3,9 @@ export class PokemonHome {
   id: number = 0;
   imageUrl: string[] = [];
   type: string = '';
+  favorite: boolean = false;
 
-  constructor(map: any) {
+  constructor(map: any, isFavorite: boolean = false) {
     this.name = map.species.name;
     this.id = map.id;
 
@@ -148,8 +149,8 @@ export class PokemonHome {
     this.imageUrl.push(map.sprites.versions['generation-viii']['icons'].front_default)
     this.imageUrl.push(map.sprites.versions['generation-viii']['icons'].front_female)
 
-    console.log(this.imageUrl)
     this.type = map.types[0].type.name;
+    this.favorite = isFavorite
   }
 }
 
@@ -160,17 +161,5 @@ export class PokemonContainer {
   constructor(map: any) {
     this.name = map.name,
       this.url = map.url
-  }
-}
-
-export class Pokemon {
-  name: string = '';
-  flavor: string = '';
-  id: number = 0;
-
-  constructor(map: any) {
-    this.name = map.name
-    this.flavor = map.flavor_text_entries[22].flavor_text;
-    this.id = map.id;
   }
 }

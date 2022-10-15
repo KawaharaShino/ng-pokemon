@@ -8,13 +8,17 @@ import { HeaderComponent } from './header/header.component';
 import { PokemonComponent } from './pokemon/pokemon.component';
 import { AppRoutingModule } from './app.routing.module';
 import { Routes } from '@angular/router';
+import { RecommendComponent } from './recommend/recommend.component';
+import { FavoriteComponent } from './favorite/favorite.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PokemonsComponent,
     HeaderComponent,
-    PokemonComponent
+    PokemonComponent,
+    RecommendComponent,
+    FavoriteComponent
   ],
   imports: [
     BrowserModule,

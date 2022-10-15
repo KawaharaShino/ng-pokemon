@@ -1,0 +1,22 @@
+<div class="favorite" >
+  <h1>Favorite Pokemon List</h1>
+  <div class="pokemon-list">
+    <ng-container *ngFor="let pokemon of displayPokemonList">
+      <div class="pokemon">
+        <div class="label">
+          <p class="id">{{ pokemon.id }}</p>
+          <img class="heart" (click)="notFavorite(pokemon.id)" src="/assets/img/heart.svg" *ngIf="pokemon.favorite"/>
+          <img class="heart" (click)="favorite(pokemon.id)" src="/assets/img/heart_disable.svg" *ngIf="!pokemon.favorite"/>
+        </div>
+        
+        <a [routerLink]="['/detail']"
+          [queryParams]="{ id: pokemon.id}">
+          <div class="img-container">
+            <img class="image" [src]="pokemon.imageUrl[0]" alt=""/>
+          </div>
+          <p class="name">{{ pokemon.name }}</p>
+        </a>
+        </div>
+    </ng-container>
+  </div>
+</div>

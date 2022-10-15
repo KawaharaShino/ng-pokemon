@@ -14,10 +14,12 @@ export class PokemonsComponent implements OnInit {
 
   private next: string = '';
   private loaded = true
+  private favoriteList: number[] = []
 
-  constructor(private pokemonService: PokemonService, private router: Router) { }
+  constructor(private pokemonService: PokemonService) { }
 
   ngOnInit(): void {
+    this.favoriteList = JSON.parse(localStorage.getItem('jsonVal') as string).favorite;
     this.getPokemons();
   }
 
@@ -29,14 +31,6 @@ export class PokemonsComponent implements OnInit {
     this.getPokemons(this.next);
   }
 
-  private shuffle([...array]): Array<any> {
-    for (let i = array.length - 1; i >= 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
   private getPokemons(next?: string): void {
     this.loaded = false
     this.pokemonService.getPokemons(next)
@@ -44,7 +38,7 @@ export class PokemonsComponent implements OnInit {
         (res: any) => {
           this.next = res.next;
 
-          const shuffledResults = this.shuffle(res.results)
+          const shuffledResults = res.results
           shuffledResults.forEach((
             element: PokemonContainer) => {
             this.getPokemon(element);
@@ -54,7 +48,6 @@ export class PokemonsComponent implements OnInit {
         (err: HttpErrorResponse) => {
           this.loaded = true
           if (err.status && err.status !== 0) {
-            console.error(err)
             alert('エラーが発生しました（' + err.status + '）');
           }
           else {
@@ -65,7 +58,7 @@ export class PokemonsComponent implements OnInit {
   private getPokemon(data: PokemonContainer): void {
     this.pokemonService.getPokemonHomeByUrl(data.url)
       .subscribe(
-        (res: any) => {
+        (res: PokemonHome) => {
           this.displayPokemonList.push(res);
         },
         (err: HttpErrorResponse) => {
@@ -78,5 +71,27 @@ export class PokemonsComponent implements OnInit {
           }
         }
       )
+  }
+  favorite(id: number): void{
+    this.displayPokemonList.forEach(element => {
+      if(element.id === id){
+        element.favorite = true
+      }
+    });
+    this.favoriteList.push(id);
+
+    var jsonVal = {favorite: this.favoriteList};
+    localStorage.setItem('jsonVal', JSON.stringify(jsonVal));
+  }
+  notFavorite(id: number): void{
+    this.displayPokemonList.forEach(element => {
+      if(element.id === id){
+        element.favorite = false
+      }
+    });
+
+    this.favoriteList = this.favoriteList.filter(item => item !== id);
+    var jsonVal = {favorite: this.favoriteList};
+    localStorage.setItem('jsonVal', JSON.stringify(jsonVal));
   }
 }

@@ -23,9 +23,7 @@ export class PokemonService {
       new PokemonHome(item)
     ))
   }
-  getPokemonById(id: number): any {
-    return this.http.get<any>('https://pokeapi.co/api/v2/pokemon-species/' + id)
-  }
+  
   getPokemonDataById(id: number): any {
     return this.http.get<any>('https://pokeapi.co/api/v2/pokemon/' + id + '/')
   }

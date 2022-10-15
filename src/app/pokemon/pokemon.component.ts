@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Pokemon, PokemonHome } from '../class/pokemon';
+import { PokemonHome } from '../class/pokemon';
 import { PokemonService } from '../service/pokemon.service';
 
 @Component({

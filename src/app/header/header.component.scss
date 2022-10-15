@@ -1,14 +1,28 @@
-.header{
+.header {
   background-color: orange;
   height: 100%;
   width: 100%;
-  p{
-    margin: 0;
-    font-size: large;
-    font-family: "Comic Sans MS";
-
-  }
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  h1{
+    width: 300px;
+  }
+  .menu{
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-around;
+  }
+  h1,h2 {
+    margin: 0;
+    font-family: "Comic Sans MS";
+    text-align: center;
+  }
+}
+@media (max-width: 600px) {
+  .header{
+    .menu {
+      display: none
+    }
+  }
 }
