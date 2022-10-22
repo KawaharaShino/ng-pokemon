@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
-import { PokemonHome, PokemonContainer } from '../class/pokemon';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { PokemonHome } from '../class/pokemon';
 import { PokemonService } from '../service/pokemon.service';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-pokemons',
@@ -17,8 +16,8 @@ export class PokemonsComponent implements OnInit {
   private next: string = '';
   private loaded = true
   private favoriteList: number[] = []
-  private nextCount: number = 1;
-  constructor(private pokemonService: PokemonService, @Inject(DOCUMENT) private document: Document) { 
+  menuHeight = 50
+  constructor(private pokemonService: PokemonService) {
   }
 
   ngOnInit(): void {
@@ -41,28 +40,28 @@ export class PokemonsComponent implements OnInit {
       this.scrollArea = this.scrollAreaDom?.nativeElement;
     }
     
-    if (document.scrollingElement!.scrollTop / this.nextCount > 400) {
-      this.nextCount = this.nextCount + 1;
+    // 全体の高さ
+    let leftScroll = this.scrollArea!.scrollHeight - (window.scrollY + (window.innerHeight - this.menuHeight));
+    if (leftScroll < 100 && this.loaded) {
+      this.loaded = false;
       this.getPokemons(this.next);
     }
   }
 
   private getPokemons(next?: string): void {
-    this.loaded = false
     this.pokemonService.getPokemons(next)
       .subscribe(
         async (res: any) => {
           this.next = res.next;
-          const main = async()=>{
-            for(const pokemon of res.results){
+          const main = async () => {
+            for (const pokemon of res.results) {
               await this.getPokemonHomeByUrl(pokemon.url);
             };
+            this.loaded = true
           };
           main();
-          this.loaded = true;
         },
         (err: HttpErrorResponse) => {
-          this.loaded = true
           if (err.status && err.status !== 0) {
             alert('エラーが発生しました（' + err.status + '）');
           }
@@ -72,27 +71,27 @@ export class PokemonsComponent implements OnInit {
         })
   }
 
-  private getPokemonHomeByUrl(value: string){
+  private getPokemonHomeByUrl(value: string) {
     return new Promise<void>((resolve) =>
-    this.pokemonService.getPokemonHomeByUrl(value)
-    .subscribe({
-      next: (res) => {
-        if (this.favoriteList.includes(res.id)) {
-          res.favorite = true;
-        }
-        this.displayPokemonList.push(res);
-        resolve();
-      },
-      error: (err: HttpErrorResponse) => {
-        if (err.status && err.status !== 0) {
-          console.error(err);
-          alert('エラーが発生しました（' + err.status + '）');
-        }
-        else {
-          alert('エラーが発生しました、インターネットへの接続を確認してください');
-        }
-      }
-    })) 
+      this.pokemonService.getPokemonHomeByUrl(value)
+        .subscribe({
+          next: (res) => {
+            if (this.favoriteList.includes(res.id)) {
+              res.favorite = true;
+            }
+            this.displayPokemonList.push(res);
+            resolve();
+          },
+          error: (err: HttpErrorResponse) => {
+            if (err.status && err.status !== 0) {
+              console.error(err);
+              alert('エラーが発生しました（' + err.status + '）');
+            }
+            else {
+              alert('エラーが発生しました、インターネットへの接続を確認してください');
+            }
+          }
+        }))
   };
 
   favorite(id: number): void {
