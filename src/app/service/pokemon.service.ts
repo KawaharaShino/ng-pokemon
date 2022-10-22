@@ -18,7 +18,7 @@ export class PokemonService {
     return this.http.get<any>(url)
   }
 
-  getPokemonHomeByUrl(url: string): any {
+  getPokemonHomeByUrl(url: string): Observable<PokemonHome> {
     return this.http.get<any>(url).pipe(map(item =>
       new PokemonHome(item)
     ))

@@ -7,9 +7,11 @@ import { PokemonsComponent } from './pokemons/pokemons.component';
 import { HeaderComponent } from './header/header.component';
 import { PokemonComponent } from './pokemon/pokemon.component';
 import { AppRoutingModule } from './app.routing.module';
-import { Routes } from '@angular/router';
 import { RecommendComponent } from './recommend/recommend.component';
 import { FavoriteComponent } from './favorite/favorite.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -18,14 +20,15 @@ import { FavoriteComponent } from './favorite/favorite.component';
     HeaderComponent,
     PokemonComponent,
     RecommendComponent,
-    FavoriteComponent
+    FavoriteComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ScrollingModule,
+    BrowserAnimationsModule,
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
