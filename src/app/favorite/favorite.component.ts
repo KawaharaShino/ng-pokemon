@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, resolveForwardRef } from '@angular/core';
 import { PokemonHome } from '../class/pokemon';
 import { PokemonService } from '../service/pokemon.service';
+import { Common } from '../common/common';
 
 @Component({
   selector: 'app-favorite',
@@ -12,6 +13,7 @@ export class FavoriteComponent implements OnInit {
 
   displayPokemonList: PokemonHome[] = [];
   private favoriteList: number[] = []
+  sortArgFunction = Common.sortArgFunction;
 
   constructor(private pokemonService: PokemonService) { }
 
@@ -19,9 +21,12 @@ export class FavoriteComponent implements OnInit {
     const favoriteList = JSON.parse(localStorage.getItem('jsonVal') as string).favorite;
     if (favoriteList) {
       this.favoriteList = favoriteList
-      this.favoriteList.forEach(async id => {
-        await this.getPokemonDataById(id);
-      })
+      const loadPokemons = async () => {
+        for (const id of favoriteList) {
+          await this.getPokemonDataById(id);
+        };
+      };
+      loadPokemons();
     }
     else {
       this.favoriteList = []
@@ -56,10 +61,10 @@ export class FavoriteComponent implements OnInit {
     });
     this.favoriteList.push(id);
 
-    const favoriteData = (this.favoriteList.sort())
-    var jsonVal = { favorite: favoriteData };
+    var jsonVal = { favorite: this.favoriteList.sort(this.sortArgFunction) };
     localStorage.setItem('jsonVal', JSON.stringify(jsonVal));
   }
+
   notFavorite(id: number): void {
     this.displayPokemonList.forEach(element => {
       if (element.id === id) {
@@ -68,8 +73,7 @@ export class FavoriteComponent implements OnInit {
     });
 
     this.favoriteList = this.favoriteList.filter(item => item !== id);
-    const favoriteData = (this.favoriteList.sort())
-    var jsonVal = { favorite: favoriteData };
+    var jsonVal = { favorite: this.favoriteList.sort(this.sortArgFunction) };
     localStorage.setItem('jsonVal', JSON.stringify(jsonVal));
   }
 }

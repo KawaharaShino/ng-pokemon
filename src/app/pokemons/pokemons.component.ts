@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { PokemonHome } from '../class/pokemon';
+import { Common } from '../common/common';
 import { PokemonService } from '../service/pokemon.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { PokemonService } from '../service/pokemon.service';
 export class PokemonsComponent implements OnInit {
   @ViewChild('scroll_area') scrollAreaDom: ElementRef | undefined;
   private scrollArea: HTMLElement | undefined;
+  sortArgFunction = Common.sortArgFunction;
 
   displayPokemonList: PokemonHome[] = [];
   private next: string = '';
@@ -53,13 +55,13 @@ export class PokemonsComponent implements OnInit {
       .subscribe(
         async (res: any) => {
           this.next = res.next;
-          const main = async () => {
+          const loadPokemons = async () => {
             for (const pokemon of res.results) {
               await this.getPokemonHomeByUrl(pokemon.url);
             };
             this.loaded = true
           };
-          main();
+          loadPokemons();
         },
         (err: HttpErrorResponse) => {
           if (err.status && err.status !== 0) {
@@ -102,7 +104,7 @@ export class PokemonsComponent implements OnInit {
     });
     this.favoriteList.push(id);
 
-    var jsonVal = { favorite: this.favoriteList.sort() };
+    var jsonVal = { favorite: this.favoriteList.sort(this.sortArgFunction) };
     localStorage.setItem('jsonVal', JSON.stringify(jsonVal));
   }
 
@@ -114,7 +116,7 @@ export class PokemonsComponent implements OnInit {
     });
 
     this.favoriteList = this.favoriteList.filter(item => item !== id);
-    var jsonVal = { favorite: this.favoriteList.sort() };
+    var jsonVal = { favorite: this.favoriteList.sort(this.sortArgFunction) };
     localStorage.setItem('jsonVal', JSON.stringify(jsonVal));
   }
 }
